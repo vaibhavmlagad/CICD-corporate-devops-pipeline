@@ -36,6 +36,45 @@ docker run -d --name nexus -p 8081:8081 sonatype/nexus3:latest
 * `sonatype/nexus3:latest`: Use the latest Nexus 3 image from Sonatype repository.
 
 ---
+#### To install Nexus 3 using Docker with host-mounted volumes for persistent storage, follow these step-by-step instructions (if you don't want to loose data on server shutdown/restart):
+
+1. Create Host Directory for Persistent Data
+    ```bash
+    sudo mkdir -p /opt/nexus-data
+    sudo chown -R 200:200 /opt/nexus-data
+    ```
+    Nexus runs as user uid 200 inside the container. Assigning proper ownership avoids permission issues.
+    
+2. Run Nexus 3 with Host Volume Mount
+    ```bash
+    docker run -d \
+    --name nexus \
+    -p 8081:8081 \
+    -v /opt/nexus-data:/nexus-data \
+    sonatype/nexus3:latest
+    ```
+    ### Explanation:
+
+    * `-v /opt/nexus-data:/nexus-data`: Mounts your host directory to the Nexus container’s persistent storage path.
+
+    ### 🔄 Optional Container Management
+    #### Stop Nexus:
+    ```bash
+    docker stop nexus
+    ```
+    #### Start Nexus:
+    ```bash
+    docker start nexus
+    ```
+    #### Remove Nexus Container (data retained):
+    ```bash
+    docker rm nexus
+    ```
+    #### Backup tip:
+    ```bash
+    tar -czvf nexus_backup_$(date +%F).tar.gz /opt/nexus-data
+    ```
+---
 
 ## 🌐 Step 2: Access Nexus UI
 
@@ -97,3 +136,5 @@ You will be prompted to change the password after first login.
 ---
 
 This process allows you to access the Nexus admin password stored within the container. Make sure to keep this password secure, as it grants administrative access to your Nexus instance.
+
+---

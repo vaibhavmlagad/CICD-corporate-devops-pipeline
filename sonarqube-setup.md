@@ -39,7 +39,52 @@ This command will download the sonarqube:lts-community Docker image from Docker 
 * `sonarqube:lts-community`: Specifies the image tag (Long-Term Support - Community Edition).
 
 ---
+#### To install SonarQube using Docker with host directory mounts (for persistent data), follow these complete and production-friendly steps: (if you don't want to loose data on server shutdown/restart):
 
+1. Create Host Directory for Persistent Data
+    ```bash
+    sudo mkdir -p /opt/sonarqube/data
+    sudo mkdir -p /opt/sonarqube/extensions
+    sudo mkdir -p /opt/sonarqube/logs
+
+    sudo chown -R 1000:1000 /opt/sonarqube
+    ```
+    Permissions (optional but recommended):
+
+2. Run SonarQube Container with Volume Mounts
+    ```bash
+    docker run -d \
+    --name sonarqube \
+    -p 9000:9000 \
+    -v /opt/sonarqube/data:/opt/sonarqube/data \
+    -v /opt/sonarqube/extensions:/opt/sonarqube/extensions \
+    -v /opt/sonarqube/logs:/opt/sonarqube/logs \
+    sonarqube:lts-community
+    ```
+    ### Explanation:
+    
+    * `-v /opt/sonarqube/data:/opt/sonarqube/data`: Persistent configuration and DB files
+    * `-v /opt/sonarqube/extensions:/opt/sonarqube/extensions`: Plugins and language analyzers
+    * `-v /opt/sonarqube/logs:/opt/sonarqube/logs`: Logs written to host
+
+    ### 🔄 Optional Container Management
+    #### Stop Sonarqube:
+    ```bash
+    docker stop sonarqube
+    ```
+    #### Start Sonarqube:
+    ```bash
+    docker start sonarqube
+    ```
+    #### Remove Sonarqube Container (data retained):
+    ```bash
+    docker rm sonarqube
+    ```
+    #### Data Backup tip:
+    ```bash
+    tar -czvf sonar_backup_$(date +%F).tar.gz /opt/sonarqube
+    ```
+---
 ## 🌐 Step 2: Access SonarQube UI
 
 Open a web browser and navigate to:
