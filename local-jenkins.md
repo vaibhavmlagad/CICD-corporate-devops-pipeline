@@ -1,4 +1,4 @@
-By default, **yes — you will lose Jenkins data** (jobs, configs, plugins, etc.) if you run it in Docker **without a volume** and then stop or remove the container.
+By default, **you will lose Jenkins data** (jobs, configs, plugins, etc.) if you run it in Docker **without a volume** and then stop or remove the container.
 
 However, if you **mount a persistent volume** to the container, Jenkins data will **survive system reboots, Docker restarts, or container recreation**.
 
