@@ -47,7 +47,7 @@ This command will download the sonarqube:lts-community Docker image from Docker 
     sudo mkdir -p /opt/sonarqube/extensions
     sudo mkdir -p /opt/sonarqube/logs
 
-    sudo chown -R 1000:1000 /opt/sonarqube
+    sudo chown -R 999:999 /opt/sonarqube
     ```
     Permissions (optional but recommended):
 

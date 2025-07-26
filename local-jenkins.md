@@ -49,9 +49,12 @@ docker run -d --name jenkins \
 If you want to **see and back up Jenkins data manually**, mount a host path:
 
 ```bash
-docker run -d --name jenkins \
+docker run -d \
+  --name jenkins \
+  --network jenkins-network \
   -p 8080:8080 -p 50000:50000 \
-  -v /home/youruser/jenkins_data:/var/jenkins_home \
+  -v /opt/jenkins_data:/var/jenkins_home \
+  -v /usr/bin/trivy:/usr/bin/trivy \
   jenkins/jenkins:lts
 ```
 
@@ -62,7 +65,9 @@ docker run -d --name jenkins \
 Make sure the mounted directory is writable by the Jenkins user (`uid 1000` by default):
 
 ```bash
-sudo chown -R 1000:1000 /home/youruser/jenkins_data
+sudo mkdir -p /opt/jenkins_data
+
+sudo chown -R 1000:1000 /opt/jenkins_data
 ```
 
 ---
